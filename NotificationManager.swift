@@ -17,11 +17,11 @@ enum NotifyWhen: String, CaseIterable, Identifiable {
 
 struct NotificationManager {
     static func scheduleNotifications(for task: Task, when: [NotifyWhen] = [.oneDay, .oneHour, .atDue]) {
-        guard task.status == .pending, let due = task.dueDate else { return }
-        let center = UNUserNotificationCenter.current()
-
         // Clear old ones first
         cancelNotifications(for: task)
+
+        guard task.status == .pending, let due = task.dueDate else { return }
+        let center = UNUserNotificationCenter.current()
 
         for moment in when {
             let fire = moment.triggerDate(for: due)

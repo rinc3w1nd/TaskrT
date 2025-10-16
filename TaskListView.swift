@@ -120,7 +120,16 @@ struct TaskListView: View {
             .sheet(isPresented: $showEditor) {
                 if let draft = draftTask {
                     TaskEditorView(task: draft, isNew: isNewDraft) { saved in
-                        if saved.status == .pending { NotificationManager.scheduleNotifications(for: saved) }
+                        switch saved.status {
+                        case .pending:
+                            if saved.dueDate != nil {
+                                NotificationManager.scheduleNotifications(for: saved)
+                            } else {
+                                NotificationManager.cancelNotifications(for: saved)
+                            }
+                        default:
+                            NotificationManager.cancelNotifications(for: saved)
+                        }
                     }
                 }
             }
