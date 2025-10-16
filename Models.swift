@@ -1,16 +1,6 @@
 import Foundation
 import SwiftData
 
-@Model
-final class Tag: Identifiable, Hashable {
-    @Attribute(.unique) var name: String
-    @Relationship(inverse: \Task.tags) var tasks: [Task] = []
-
-    init(name: String) {
-        self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-}
-
 enum TaskStatus: String, Codable, CaseIterable, Identifiable {
     case pending, done, canceled
     var id: String { rawValue }
@@ -23,7 +13,7 @@ final class Task: Identifiable {
     var createdAt: Date
     var dueDate: Date?
     var statusRaw: String
-    @Relationship(deleteRule: .nullify, inverse: \Tag.tasks) var tags: [Tag] = []
+    @Relationship(deleteRule: .nullify) var tags: [Tag] = []
 
     var status: TaskStatus {
         get { TaskStatus(rawValue: statusRaw) ?? .pending }
@@ -39,5 +29,14 @@ final class Task: Identifiable {
         self.createdAt = Date()
         self.dueDate = dueDate
         self.statusRaw = status.rawValue
+    }
+}
+
+@Model
+final class Tag: Identifiable, Hashable {
+    @Attribute(.unique) var name: String
+
+    init(name: String) {
+        self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
