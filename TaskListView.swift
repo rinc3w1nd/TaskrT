@@ -11,7 +11,7 @@ struct TaskListView: View {
     @State private var selectedTags: Set<String> = []
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 // Filters
                 HStack {
