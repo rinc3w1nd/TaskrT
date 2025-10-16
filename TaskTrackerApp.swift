@@ -25,8 +25,8 @@ struct TaskTrackerApp: App {
     }
 
     init() {
-        let configuration = ModelConfiguration(for: TaskSchemaV2.self, migrationPlan: TaskMigrationPlan.self)
-        modelContainer = try! ModelContainer(for: TaskSchemaV2.self, configurations: configuration)
+        let schema = Schema(versionedSchema: TaskSchemaV2.self)
+        modelContainer = try! ModelContainer(for: schema, migrationPlan: TaskMigrationPlan.self)
 
         // Ask once on first launch
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
