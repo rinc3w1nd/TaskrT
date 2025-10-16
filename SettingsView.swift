@@ -19,7 +19,7 @@ struct SettingsView: View {
             HStack {
                 Spacer()
                 Button("Reset to Defaults") {
-                    scheme = DueColorScheme(blueMinDays: 30, yellowMinDays: 15, orangeMinDays: 8, redMinDays: 0)
+                    scheme = .default
                 }
                 Button("Save") {
                     DueColorScheme.save(scheme)

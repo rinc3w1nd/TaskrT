@@ -12,13 +12,22 @@ struct DueColorScheme {
     var orangeMinDays: Int
     var redMinDays: Int
 
+    static let `default` = DueColorScheme(blueMinDays: 30, yellowMinDays: 15, orangeMinDays: 8, redMinDays: 0)
+
     static func load() -> DueColorScheme {
         let d = UserDefaults.standard
+        d.register(defaults: [
+            "blueMinDays": Self.default.blueMinDays,
+            "yellowMinDays": Self.default.yellowMinDays,
+            "orangeMinDays": Self.default.orangeMinDays,
+            "redMinDays": Self.default.redMinDays
+        ])
+
         return .init(
-            blueMinDays:   max(0, d.integer(forKey: "blueMinDays")   == 0 ? 30 : d.integer(forKey: "blueMinDays")),
-            yellowMinDays: max(0, d.integer(forKey: "yellowMinDays") == 0 ? 15 : d.integer(forKey: "yellowMinDays")),
-            orangeMinDays: max(0, d.integer(forKey: "orangeMinDays") == 0 ? 8  : d.integer(forKey: "orangeMinDays")),
-            redMinDays:    max(0, d.integer(forKey: "redMinDays")    == 0 ? 0  : d.integer(forKey: "redMinDays"))
+            blueMinDays:   max(0, d.integer(forKey: "blueMinDays")),
+            yellowMinDays: max(0, d.integer(forKey: "yellowMinDays")),
+            orangeMinDays: max(0, d.integer(forKey: "orangeMinDays")),
+            redMinDays:    max(0, d.integer(forKey: "redMinDays"))
         )
     }
 
