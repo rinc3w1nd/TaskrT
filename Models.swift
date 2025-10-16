@@ -72,7 +72,7 @@ enum TaskSchemaV2: VersionedSchema {
         var contentType: String?
         var fileSize: Int?
         var bookmarkData: Data?
-        var storedData: Data?
+        var storedRelativePath: String?
         var createdAt: Date
         var position: Int
 
@@ -82,7 +82,7 @@ enum TaskSchemaV2: VersionedSchema {
              contentType: String? = nil,
              fileSize: Int? = nil,
              bookmarkData: Data? = nil,
-             storedData: Data? = nil,
+             storedRelativePath: String? = nil,
              createdAt: Date = Date(),
              position: Int,
              task: Task? = nil) {
@@ -90,13 +90,13 @@ enum TaskSchemaV2: VersionedSchema {
             self.contentType = contentType
             self.fileSize = fileSize
             self.bookmarkData = bookmarkData
-            self.storedData = storedData
+            self.storedRelativePath = storedRelativePath
             self.createdAt = createdAt
             self.position = position
             self.task = task
         }
 
-        var isBookmark: Bool { bookmarkData != nil && storedData == nil }
+        var isBookmark: Bool { bookmarkData != nil && storedRelativePath == nil }
     }
 
     @Model
@@ -161,14 +161,14 @@ enum TaskSchemaV2: VersionedSchema {
                            contentType: String? = nil,
                            fileSize: Int? = nil,
                            bookmarkData: Data? = nil,
-                           storedData: Data? = nil,
+                           storedRelativePath: String? = nil,
                            createdAt: Date = Date()) -> TaskAttachment {
             let nextPosition = (attachments.map { $0.position }.max() ?? -1) + 1
             let attachment = TaskAttachment(fileName: fileName,
                                             contentType: contentType,
                                             fileSize: fileSize,
                                             bookmarkData: bookmarkData,
-                                            storedData: storedData,
+                                            storedRelativePath: storedRelativePath,
                                             createdAt: createdAt,
                                             position: nextPosition,
                                             task: self)

@@ -87,7 +87,20 @@ struct TaskListView: View {
                             }
                             let latestNote = task.latestNoteText()
                             if !latestNote.isEmpty {
-                                Text(latestNote).font(.caption).lineLimit(1).foregroundColor(.secondary)
+                                Text(latestNote)
+                                    .font(.caption)
+                                    .lineLimit(1)
+                                    .foregroundColor(.secondary)
+                            }
+                            if !task.attachments.isEmpty {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "paperclip")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text("\(task.attachments.count)")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
                             }
                         }
                         Spacer()
