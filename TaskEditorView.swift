@@ -6,7 +6,7 @@ struct TaskEditorView: View {
     @Environment(\.modelContext) private var ctx
 
     @State var title: String
-    @State var notes: String
+    @State var noteText: String
     @State var dueDateEnabled: Bool
     @State var dueDate: Date
     @State var tagInput: String
@@ -20,7 +20,7 @@ struct TaskEditorView: View {
     init(task: Task, isNew: Bool, onSave: @escaping (Task) -> Void) {
         self.task = task
         self._title = State(initialValue: task.title)
-        self._notes = State(initialValue: task.notes)
+        self._noteText = State(initialValue: task.latestNoteText())
         self._dueDateEnabled = State(initialValue: task.dueDate != nil)
         self._dueDate = State(initialValue: task.dueDate ?? Calendar.current.date(byAdding: .day, value: 1, to: Date())!)
         self._tagInput = State(initialValue: task.tags.map { $0.name }.joined(separator: ", "))
@@ -37,7 +37,7 @@ struct TaskEditorView: View {
             TextField("Title", text: $title)
                 .textFieldStyle(.roundedBorder)
 
-            TextEditor(text: $notes)
+            TextEditor(text: $noteText)
                 .frame(minHeight: 80)
                 .overlay(RoundedRectangle(cornerRadius: 6).stroke(.quaternary))
 
@@ -87,7 +87,7 @@ struct TaskEditorView: View {
                 }
                 Button("Save") {
                     task.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
-                    task.notes = notes
+                    task.replaceNotes(with: noteText)
                     task.status = status
                     task.dueDate = dueDateEnabled ? dueDate : nil
 

@@ -4,11 +4,13 @@ import UserNotifications
 
 @main
 struct TaskTrackerApp: App {
+    private let modelContainer: ModelContainer
+
     var body: some Scene {
         WindowGroup {
             TaskListView()
         }
-        .modelContainer(for: [Task.self, Tag.self])
+        .modelContainer(modelContainer)
         .commands {
             CommandGroup(replacing: .newItem) {
                 Button("New Task") {
@@ -23,6 +25,9 @@ struct TaskTrackerApp: App {
     }
 
     init() {
+        let configuration = ModelConfiguration(for: TaskSchemaV2.self, migrationPlan: TaskMigrationPlan.self)
+        modelContainer = try! ModelContainer(for: TaskSchemaV2.self, configurations: configuration)
+
         // Ask once on first launch
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
