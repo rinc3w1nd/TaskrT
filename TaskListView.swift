@@ -85,8 +85,9 @@ struct TaskListView: View {
                                     }.frame(height: 16)
                                 }
                             }
-                            if !task.notes.isEmpty {
-                                Text(task.notes).font(.caption).lineLimit(1).foregroundColor(.secondary)
+                            let latestNote = task.latestNoteText()
+                            if !latestNote.isEmpty {
+                                Text(latestNote).font(.caption).lineLimit(1).foregroundColor(.secondary)
                             }
                         }
                         Spacer()
@@ -173,7 +174,8 @@ struct TaskListView: View {
                 }
                 if !searchText.isEmpty {
                     let q = searchText.lowercased()
-                    if !(t.title.lowercased().contains(q) || t.notes.lowercased().contains(q)) {
+                    let latestNote = t.latestNoteText().lowercased()
+                    if !(t.title.lowercased().contains(q) || latestNote.contains(q)) {
                         return false
                     }
                 }
