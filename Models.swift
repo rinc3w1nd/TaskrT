@@ -200,13 +200,13 @@ enum TaskMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] { [TaskSchemaV1.self, TaskSchemaV2.self] }
 
     static var stages: [MigrationStage] {
-        [MigrationStage.custom(fromVersion: TaskSchemaV1.version,
-                               toVersion: TaskSchemaV2.version,
+        [MigrationStage.custom(from: TaskSchemaV1.self,
+                               to: TaskSchemaV2.self,
                                willMigrate: migrateLegacyNotes,
                                didMigrate: nil)]
     }
 
-    private static func migrateLegacyNotes(context: MigrationStage.CustomMigrationContext,
+    private static func migrateLegacyNotes(context: MigrationStage.CustomMigrationContext<TaskSchemaV1, TaskSchemaV2>,
                                            modelContext: ModelContext) throws {
         var tagMap: [String: TaskSchemaV2.Tag] = [:]
 
