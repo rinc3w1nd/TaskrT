@@ -56,7 +56,7 @@ enum TaskSchemaV2: VersionedSchema {
         var createdAt: Date
         var position: Int
 
-        @Relationship(deleteRule: .nullify, inverse: \Task.notes) var task: Task?
+        @Relationship(deleteRule: .nullify, inverse: \TaskSchemaV2.Task.notes) var task: Task?
 
         init(text: String, createdAt: Date = Date(), position: Int, task: Task? = nil) {
             self.text = text
@@ -76,7 +76,7 @@ enum TaskSchemaV2: VersionedSchema {
         var createdAt: Date
         var position: Int
 
-        @Relationship(deleteRule: .nullify, inverse: \Task.attachments) var task: Task?
+        @Relationship(deleteRule: .nullify, inverse: \TaskSchemaV2.Task.attachments) var task: Task?
 
         init(fileName: String,
              contentType: String? = nil,
@@ -107,9 +107,9 @@ enum TaskSchemaV2: VersionedSchema {
         var statusRaw: String
 
         @Relationship(deleteRule: .nullify) var tags: [Tag] = []
-        @Relationship(deleteRule: .cascade, inverse: \TaskWorkNote.task, sortDescriptor: SortDescriptor(\TaskWorkNote.position, order: .forward))
+        @Relationship(deleteRule: .cascade, inverse: \TaskSchemaV2.TaskWorkNote.task, sortDescriptor: SortDescriptor(\TaskWorkNote.position, order: .forward))
         var notes: [TaskWorkNote] = []
-        @Relationship(deleteRule: .cascade, inverse: \TaskAttachment.task, sortDescriptor: SortDescriptor(\TaskAttachment.position, order: .forward))
+        @Relationship(deleteRule: .cascade, inverse: \TaskSchemaV2.TaskAttachment.task, sortDescriptor: SortDescriptor(\TaskAttachment.position, order: .forward))
         var attachments: [TaskAttachment] = []
 
         var status: TaskStatus {
