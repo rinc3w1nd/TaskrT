@@ -200,17 +200,21 @@ enum TaskMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] { [TaskSchemaV1.self, TaskSchemaV2.self] }
 
     static var stages: [MigrationStage] {
-        [MigrationStage.custom(from: TaskSchemaV1.self, to: TaskSchemaV2.self, willMigrate: migrateLegacyNotes)]
+        [MigrationStage.custom(fromVersion: TaskSchemaV1.version,
+                               toVersion: TaskSchemaV2.version,
+                               willMigrate: migrateLegacyNotes,
+                               didMigrate: nil)]
     }
 
-    private static func migrateLegacyNotes(context: MigrationContext) throws {
+    private static func migrateLegacyNotes(context: MigrationStage.CustomMigrationContext,
+                                           modelContext: ModelContext) throws {
         var tagMap: [String: TaskSchemaV2.Tag] = [:]
 
         try context.enumerate(TaskSchemaV1.Tag.self) { oldTag in
             let name = oldTag.model.name
             if tagMap[name] == nil {
                 let newTag = TaskSchemaV2.Tag(name: name)
-                context.insert(newTag)
+                modelContext.insert(newTag)
                 tagMap[name] = newTag
             }
         }
@@ -227,7 +231,7 @@ enum TaskMigrationPlan: SchemaMigrationPlan {
             if !source.notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 _ = newTask.addNote(text: source.notes, createdAt: source.createdAt)
             }
-            context.insert(newTask)
+            modelContext.insert(newTask)
         }
     }
 }
