@@ -107,9 +107,9 @@ enum TaskSchemaV2: VersionedSchema {
         var statusRaw: String
 
         @Relationship(deleteRule: .nullify) var tags: [Tag] = []
-        @Relationship(deleteRule: .cascade, inverse: \TaskSchemaV2.TaskWorkNote.task, sortDescriptor: SortDescriptor(\TaskWorkNote.position, order: .forward))
+        @Relationship(deleteRule: .cascade, inverse: \TaskSchemaV2.TaskWorkNote.task)
         var notes: [TaskWorkNote] = []
-        @Relationship(deleteRule: .cascade, inverse: \TaskSchemaV2.TaskAttachment.task, sortDescriptor: SortDescriptor(\TaskAttachment.position, order: .forward))
+        @Relationship(deleteRule: .cascade, inverse: \TaskSchemaV2.TaskAttachment.task)
         var attachments: [TaskAttachment] = []
 
         var status: TaskStatus {
