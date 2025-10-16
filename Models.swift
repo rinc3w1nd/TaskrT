@@ -4,6 +4,7 @@ import SwiftData
 @Model
 final class Tag: Identifiable, Hashable {
     @Attribute(.unique) var name: String
+    @Relationship(inverse: \Task.tags) var tasks: [Task] = []
 
     init(name: String) {
         self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -22,7 +23,7 @@ final class Task: Identifiable {
     var createdAt: Date
     var dueDate: Date?
     var statusRaw: String
-    @Relationship(deleteRule: .nullify, inverse: \TagTasks.tag) var tags: [Tag] = []
+    @Relationship(deleteRule: .nullify, inverse: \Tag.tasks) var tags: [Tag] = []
 
     var status: TaskStatus {
         get { TaskStatus(rawValue: statusRaw) ?? .pending }
@@ -38,16 +39,5 @@ final class Task: Identifiable {
         self.createdAt = Date()
         self.dueDate = dueDate
         self.statusRaw = status.rawValue
-    }
-}
-
-// A lightweight join helper so each Tag knows which Tasks reference it (inverse)
-@Model
-final class TagTasks {
-    @Relationship var tag: Tag
-    @Relationship var task: Task
-    init(tag: Tag, task: Task) {
-        self.tag = tag
-        self.task = task
     }
 }
