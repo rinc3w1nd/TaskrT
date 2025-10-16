@@ -7,7 +7,7 @@ enum TaskStatus: String, Codable, CaseIterable, Identifiable {
 }
 
 enum TaskSchemaV1: VersionedSchema {
-    static var versionIdentifier = Schema.VersionIdentifier("TaskSchemaV1")
+    static let version = Schema.Version(1, 0, 0)
     static var models: [any PersistentModel.Type] { [Task.self, Tag.self] }
 
     @Model
@@ -47,7 +47,7 @@ enum TaskSchemaV1: VersionedSchema {
 }
 
 enum TaskSchemaV2: VersionedSchema {
-    static var versionIdentifier = Schema.VersionIdentifier("TaskSchemaV2")
+    static let version = Schema.Version(2, 0, 0)
     static var models: [any PersistentModel.Type] { [Task.self, Tag.self, TaskWorkNote.self, TaskAttachment.self] }
 
     @Model
